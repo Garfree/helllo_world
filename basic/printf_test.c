@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include <stdio.h>
 
 
 /*
@@ -28,14 +28,14 @@ void print_type()
 {
     printf("------ print_type ------\n");
     printf("%i\n",123);  //输出123
-    printf("0%o\n",123); //输出0123
+    printf("0%o\n",123); //输出0173
     printf("%u\n",123); //输出123 
     printf("0x%x 0x%X\n",123,123); //输出0x7b 0x7B 
     printf("%.9f %.9lf\n",0.000000123,0.000000123); //输出0.000000123 0.000000123。默认精确到小数点后六位 
     printf("%e %E\n",0.000000123,0.000000123); //输出1.230000e-07 1.230000E-07 
     printf("%g %g\n",0.000000123,0.123); //输出1.23e-07 0.123 
     printf("%G %G\n",0.000000123,0.123); //输出1.23E-07 0.123 
-    printf("%c\n",64); //输出A 
+    printf("%c\n",65); //输出A 
     printf("%s\n","测试test"); //输出：测试test 
     //setlocale(LC_ALL,"zh_CN.UTF-8");wchar_t wtest[]=L"测试Test";printf("%S\n",wtest);//输出：测试test 
     printf("%010p\n","lvlv");//输出：0x004007e6 
@@ -43,10 +43,6 @@ void print_type()
     printf("%%\n");//输出:% 
     printf("%m\n");
     printf("%a %A\n",15.15,15.15); //输出：0x1.e4ccccccccccdp+3 0X1.E4CCCCCCCCCCDP+3 
-    
-    
-    
-    
 }
 
 /*
@@ -71,7 +67,7 @@ void print_flags()
     printf("%x %#x\n",1000,1000);       //输出0x
     printf("%.0f %#.0f\n",1000.0,1000.0);//当小数点后没有值时依然输出小数点
     printf("%g %#g\n",1000.0,1000.0);   //保留小数点后后的0
-    printf("%05d\n",1000);              //前面补01
+    printf("%05d\n",1000);              //前面补0
 }
 /*
 3 输出最小宽度（width）
@@ -81,8 +77,8 @@ void print_flags()
 void print_width()
 {
     printf("\n------ print_width ------\n");
-    printf("%06d",1000); //输出:001000 
-    printf("%0*d",6,1000); //输出:001000 
+    printf("%06d\n",1000); //输出:001000 
+    printf("%0*d\n",6,1000); //输出:001000 
 }
 /*
 4 精度（.precision）
@@ -99,7 +95,7 @@ precision不显示指定，则默认为0
 1000.12345679
 1000.12345600
 1000.1235
-abcdefgh1
+abcdefgh
 
 注意，在对浮点数和整数截断时，存在四舍五入。
 */
@@ -123,8 +119,8 @@ void print_precision()
 193
 32767
 65535
-9223372036854775807
-184467440737095516151
+-1
+4294967295
 
 注意： 
 long int到底是32bits还是64bits跟生成的程序是32bits还是64bits一一对应，如果使用g++编译程序的话，可通过-m32或-m64选项分别生成32bits和64bits的程序。
@@ -136,8 +132,8 @@ void print_length()
     printf("%hhu\n",'A'+128);   //输出无符号char
     printf("%hd\n",32767);      //输出有符号短整型short int
     printf("%hu\n",65535);      //输出无符号短整型unsigned short int
-    printf("%ld\n",0x7fffffffffffffff);     //输出有符号长整型long int
-    printf("%lu\n",0xffffffffffffffff);     //输出有符号长整型unsigned long int1
+    printf("%ld\n",0x7fffffff);     //输出有符号长整型long int
+    printf("%lu\n",0xffffffff);     //输出有符号长整型unsigned long int1
 }
 
 /*
@@ -175,6 +171,9 @@ linux和Windows下的缓冲区管理可见：C的全缓冲、行缓冲和无缓冲。
 */
 void print_buffer()
 {
+	printf("\n------ print fixed length of string ------\n");
+	char *str="This is a test!";
+	printf("%.*s\n",6,str);
 }
 
 /*print all test example*/
@@ -186,5 +185,5 @@ void printf_test(void)
     print_precision();
     print_length();
     //print_esc();
-    //print_buffer();
+    print_buffer();
 }

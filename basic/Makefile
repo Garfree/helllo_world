@@ -21,5 +21,5 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 	
 .PHONY:clean
 clean:
-	rm -rf *.o
+	rm -rf *.o *.exe
 	
