@@ -1,6 +1,9 @@
-#include "stdio.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <time.h>
+
 
 /*
 1.fopen（打开文件）
@@ -33,37 +36,9 @@ fp = fopen("/local/test.c","a+");
 fprintf(fp,"%s\n",str);
 */
 
-/*add_content_to_file*/
-int fprintf_test(){
-    FILE * fp;
-    fp=fopen("test_file.txt","a+");
-    if(fp==NULL) 
-		return 0;
-	char* str ="=============== 2.fprintf test ===============";
-	fprintf(fp,"%s\n",str);
-	fclose(fp);
-	
-	/*
-	FILE * fp1;
-	fp1=fopen("test_file.txt","a+");
-    if(fp1==NULL) 
-		return 0;
-	char* str1;
-	str1 = (char*)malloc(100);
-	fscanf(fp1,"%s",str1);
-	
-	printf("%s\n",str1);
-	free(str1);
-	
-	fclose(fp1);
-	*/
-	
-    
-    return 0;
-} 
 /*
 3. fscanf
-功能：从一个流中执行格式化输入
+功能：从一个流中执行格式化输入,fscanf遇到空格和换行时结束，注意空格时也结束。这与fgets有区别，fgets遇到空格不结束。
 表头文件：#include<stdio.h>
 函数原型：int fscanf(FILE *stream, char *format[,argument...]);
 FILE* 一个FILE型的指针
@@ -72,6 +47,29 @@ char* 格式化输出函数，和scanf里的格式一样
 fp = fopen("/local/test.c","a+");
 fscanf(fp,"%s",str);
 */
+
+/*add_content_to_file*/
+int fprintf_test(){
+    FILE * fp;
+    time_t t;
+  
+    fp=fopen("test_file.t","a+");
+    //if(fp==NULL) return -1;
+	char* str ="=============== 2.fprintf test ===============";
+    time(&t); //get current time
+	fprintf(fp,"%s@%s",str,ctime(&t));
+	
+	fseek(fp,0,SEEK_SET);
+	char* str1;
+	str1 = (char*)malloc(100);
+	fscanf(fp,"%s",str1);
+	printf("%s\n",str1);
+	free(str1);
+	
+	fclose(fp);
+	
+    return 0;
+} 
 
 /*
 4. clearerr（清除文件流的错误旗标）
@@ -102,8 +100,13 @@ fscanf(fp,"%s",str);
 */
 
 int fdopen_test(){
-    FILE * fp =fdopen(0,"w+");
-    fprintf(fp,"%s/n","hello!");
+    //FILE * fp =fdopen(STDIN_FILENO,"w+");
+    FILE * fp =fdopen(1,"w+");
+    if(fp == NULL){
+        printf("fdopen return NULL !\n");
+        return -1;
+    }
+    fprintf(fp,"%s\n","hello!");
     fclose(fp);
     return 0;
 } 
@@ -139,7 +142,11 @@ int fdopen_test(){
 int fgetc_test(){
     FILE *fp;
     int c;
-    fp=fopen("exist","r");
+    fp=fopen("test_file.t","r");
+    if(fp ==NULL) {
+        printf("test_file not exist!\n");
+        return -1;
+    }
     while((c=fgetc(fp))!=EOF)
     printf("%c",c);
     fclose(fp);
@@ -174,9 +181,13 @@ int fgets_test()
 int fileno_test(){
     FILE * fp;
     int fd;
-    fp=fopen("/etc/passwd","r");
+    fp=fopen("test_file.t","r");
+    if(fp == NULL){
+        printf("test_file not exist!\n");
+        return -1;
+    }
     fd=fileno(fp);
-    printf("fd=%d/n",fd);
+    printf("test_file.t fd=%d\n",fd);
     fclose(fp);
     return 0;
 } 
@@ -194,9 +205,9 @@ int fputc_test(){
     FILE * fp;
     char a[26]="abcdefghijklmnopqrstuvwxyz";
     int i;
-    fp= fopen("noexist","w");
+    fp= fopen("test_file.txt","w");
     for(i=0;i<26;i++)
-    fputc((int)a,fp);
+        fputc((int)a,fp);
     fclose(fp);
     return 0;
 } 
@@ -228,11 +239,15 @@ int size;
 int fread_test(){
     FILE * stream;
     int i;
-    stream = fopen("/tmp/fwrite","r");
+    stream = fopen("test_file.t","r");
+    if(stream == NULL){
+        printf("test_file not exist!\n");
+        return -1;
+    }
     fread(s,sizeof(struct test),nmemb,stream);
     fclose(stream);
     for(i=0;i<nmemb;i++)
-    printf("name[%d]=%-20s:size[%d]=%d/n",i,s[i].name,i,s[i].size);
+        printf("name[%d]=%-20s:size[%d]=%d\n",i,s[i].name,i,s[i].size);
     return 0;
 } 
 
@@ -274,15 +289,19 @@ int fseek_test(){
     FILE * stream;
     long offset;
     fpos_t pos;
-    stream=fopen("/etc/passwd","r");
+    stream=fopen("test_file.t","r");
+    if(stream == NULL){
+        printf("test_file not exist!\n");
+        return -1;
+    }
     fseek(stream,5,SEEK_SET);
-    printf("offset=%d/n",ftell(stream));
+    printf("offset=%d\n",ftell(stream));
     rewind(stream);
     fgetpos(stream,&pos);
-    printf("offset=%d/n",pos);
+    printf("offset=%d\n",pos);
     pos=10;
     fsetpos(stream,&pos);
-    printf("offset = %d/n",ftell(stream));
+    printf("offset = %d\n",ftell(stream));
     fclose(stream);
     return 0;
 } 
@@ -313,7 +332,7 @@ int fwrite_test(){
     set_s(0,"Linux!");
     set_s(1,"FreeBSD!");
     set_s(2,"Windows2000.");
-    stream=fopen("/tmp/fwrite","w");
+    stream=fopen("test_file.t","a+");
     fwrite(s,sizeof(struct test),nmemb,stream);
     fclose(stream);
     return 0;
@@ -470,26 +489,24 @@ int file_mtest(){
 	int num = 10;
 	str = (char*)malloc(100);
 	//snprintf(str, 10,"test: %s", "0123456789012345678");
-	// printf("str=%s\n", str);
-	fp = fopen("/local/test.c","a+");
-	if (fp==NULL){
-		printf("Fail to open file\n");
-	}
+	//printf("str=%s\n", str);
+	fp = fopen("test_file.t","a+");
+	
 	//fseek(fp,-1,SEEK_END);
 	num = ftell(fp);
 	printf("test file long:%d\n",num);
-	fscanf(fp,"%s",str);
-	printf("str = %s\n",str);
-	printf("test a: %s\n",str);
+	//fscanf(fp,"%s",str);
+	//printf("str = %s\n",str);
 	while ((re=getc(fp))!=EOF){//getc可以用作fgetc用
 		printf("%c",re);
 	}
+    
 	//fread(str,10,10,fp);
 	fgets(str,100,fp);
-	printf("test a: %s\n",str);
-	sprintf(str,"xiewei test is:%s", "ABCDEFGHIGKMNI");
-	printf("str2=%s\n", str);
-	//  fprintf(fp,"%s\n",str);
+	printf("str: %s\n",str);
+	//sprintf(str,"xiewei test is:%s", "ABCDEFGHIGKMNI");
+	//printf("str2=%s\n", str);
+	//fprintf(fp,"%s\n",str);
 	fwrite(str,2,10,fp);
 	num = ftell(fp);
 	if(str!=NULL){
@@ -503,6 +520,45 @@ int file_mtest(){
 /*file operation test */
 void file_test(void)
 {
-    fprintf_test();
-    //print_buffer();
+    int n;
+    
+    while(1)
+    {
+        printf("\n2.fprintf\t 6.fdopen\t 9.fgetc\t 11.fileno\t 14.fread\t 16.fseek\t 18.fwrite\t \n");
+        printf("Choose file test option :");
+        fscanf(stdin,"%d",&n);
+        switch(n)
+        {
+        case 2:
+            fprintf_test();
+        break;
+        case 6:
+            fdopen_test();
+        break;
+        case 9:
+            fgetc_test();
+        break;
+        case 11:
+            fileno_test();
+        break;
+        case 14:
+            fread_test();
+        break;
+        case 16:
+            fseek_test();
+        break;
+        case 18:
+            fwrite_test();
+        break;
+        
+        default:
+            file_mtest();
+            break;
+        }
+        getchar();
+        if(0 == n)
+            break;
+    }
+    //fgets_test();
+    //fileno_test();
 }

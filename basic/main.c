@@ -20,9 +20,9 @@
 int main(int argc, char* argv[])
 {
     if(NULL == argv[1]){
-        printf("Please input a string parameter,like \n\
+        printf("Please input a string parameter,like\n\
 		\"printf\"\n\
-		\"printf\"\n\
+		\"file\"\n\
 		...\n");
         return -1;
     }
