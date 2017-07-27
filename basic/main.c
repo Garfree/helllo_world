@@ -21,9 +21,10 @@ int main(int argc, char* argv[])
 {
     if(NULL == argv[1]){
         printf("Please input a string parameter,like\n\
-		\"printf\"\n\
-		\"file\"\n\
-		...\n");
+        \"printf\"\n\
+        \"file\"\n\
+        \"string\"\n\
+        ...\n");
         return -1;
     }
     printf("=============== start of test ===============\n");
@@ -33,12 +34,19 @@ int main(int argc, char* argv[])
     {
         printf_test();
     }
+    
+    /*string operate test*/
+    if(!strcmp("string",argv[1]))
+    {
+        string_test();
+    }
 	
 	/*file operate test*/
     if(!strcmp("file",argv[1]))
     {
         file_test();
     }
+    
     
     
  
