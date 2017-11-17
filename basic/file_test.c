@@ -207,7 +207,7 @@ int fputc_test(){
     int i;
     fp= fopen("test_file.txt","w");
     for(i=0;i<26;i++)
-        fputc((int)a,fp);
+        fputc((int)a[i],fp);
     fclose(fp);
     return 0;
 } 
@@ -524,35 +524,37 @@ void file_test(void)
     
     while(1)
     {
-        printf("\n2.fprintf\t 6.fdopen\t 9.fgetc\t 11.fileno\t 14.fread\t 16.fseek\t 18.fwrite\t \n");
+        printf("\n1.fprintf\t 2.fdopen\t 3.fgetc\t 4.fileno\t 5.fread\t 6.fseek\t 7.fwrite\t 8.test_file\t \n");
         printf("Choose file test option :");
         fscanf(stdin,"%d",&n);
         switch(n)
         {
-        case 2:
+        case 1:
             fprintf_test();
         break;
-        case 6:
+        case 2:
             fdopen_test();
         break;
-        case 9:
+        case 3:
             fgetc_test();
         break;
-        case 11:
+        case 4:
             fileno_test();
         break;
-        case 14:
+        case 5:
             fread_test();
         break;
-        case 16:
+        case 6:
             fseek_test();
         break;
-        case 18:
+        case 7:
             fwrite_test();
+        break;
+		case 8:
+            file_mtest();
         break;
         
         default:
-            file_mtest();
             break;
         }
         getchar();

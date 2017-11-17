@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
         \"printf\"\n\
         \"file\"\n\
         \"string\"\n\
+		\"list\"\n\
         ...\n");
         return -1;
     }
@@ -45,6 +46,12 @@ int main(int argc, char* argv[])
     if(!strcmp("file",argv[1]))
     {
         file_test();
+    }
+	
+	/*list operate test*/
+    if(!strcmp("list",argv[1]))
+    {
+        list_test();
     }
     
     
